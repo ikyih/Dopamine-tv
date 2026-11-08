@@ -4,6 +4,10 @@
 
 An incomplete rootless semi-untethered jailbreak for tvOS 15.0 - 26.6.1?
 
+Will probably never work properly.
+
+momentarius-tv may or may not work.
+
 Please note that all issues related to version support will be deleted without response.
 
 
