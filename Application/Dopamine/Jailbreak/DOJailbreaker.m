@@ -35,8 +35,10 @@
 #import <sys/utsname.h>
 #import "spawn.h"
 #import "clock_alarm.h"
+#import "tvos_mach_compat.h"
 #import <IOSurface/IOSurfaceRef.h>
 int posix_spawnattr_set_registered_ports_np(posix_spawnattr_t * __restrict attr, mach_port_t portarray[], uint32_t count);
+#import "tvos_process_compat.h"
 
 #define kCFPreferencesNoContainer CFSTR("kCFPreferencesNoContainer")
 void _CFPreferencesSetValueWithContainer(CFStringRef key, CFPropertyListRef value, CFStringRef applicationID, CFStringRef userName, CFStringRef hostName, CFStringRef containerPath);

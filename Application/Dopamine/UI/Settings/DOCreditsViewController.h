@@ -6,6 +6,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <TargetConditionals.h>
+#if !TARGET_OS_TV
 #import <Preferences/PSListController.h>
 #import <Preferences/PSSpecifier.h>
 #import "DOPSListController.h"
@@ -17,3 +19,4 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+#endif

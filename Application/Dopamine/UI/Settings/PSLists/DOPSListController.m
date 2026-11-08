@@ -7,6 +7,7 @@
 
 #import "DOPSListController.h"
 #import "DOThemeManager.h"
+#import <TargetConditionals.h>
 
 @interface DOPSListController ()
 
@@ -17,8 +18,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+#if !TARGET_OS_TV
     [_table setSeparatorColor:[UIColor clearColor]];
     [_table setBackgroundColor:[UIColor clearColor]];
+#endif
     [DOPSListController setupViewControllerStyle:self];
 }
 
@@ -32,6 +35,7 @@
     vc.view.layer.masksToBounds = YES;
     vc.view.layer.cornerCurve = kCACornerCurveContinuous;
     
+#if !TARGET_OS_TV
     if (@available(iOS 19.0, *)) {
         // Apple broke the method below by reimplementing some Preferences.framework classes in SwiftUI 🤮
         // Now onTintColor is only implemented when the cell is initialized but gets reset to the stock color when the cell is reused
@@ -40,8 +44,10 @@
     else {
         [UISwitch appearanceWhenContainedInInstancesOfClasses:@[[vc class]]].onTintColor = [UIColor colorWithRed: 71.0/255.0 green: 169.0/255.0 blue: 135.0/255.0 alpha: 1.0];
     }
+#endif
 }
 
+#if !TARGET_OS_TV
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     cell.backgroundColor = [UIColor clearColor];
 }
@@ -57,6 +63,7 @@
 {
     return UIStatusBarStyleLightContent;
 }
+#endif
 
 
 @end

@@ -9,6 +9,7 @@
 #import "DOPSListController.h"
 #import "DOPSListItemsController.h"
 #import "DOUIManager.h"
+#import <TargetConditionals.h>
 
 @interface DOLicenseViewController ()
 
@@ -16,7 +17,9 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, assign) int selectedLicense;
 
+#if !TARGET_OS_TV
 @property (nonatomic, strong) UIImpactFeedbackGenerator *impactGenerator;
+#endif
 
 @end
 
@@ -64,13 +67,17 @@
         [self.license.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor constant:0]
     ]];
 
+#if !TARGET_OS_TV
     self.license.editable = NO;
+#endif
     self.license.font = [UIFont systemFontOfSize:14];
     self.license.textColor = [UIColor whiteColor];
     self.license.backgroundColor = [UIColor clearColor];
     self.selectedLicense = 0;
 
+#if !TARGET_OS_TV
     self.impactGenerator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleLight];
+#endif
 }
 
 + (NSArray*)licenses
@@ -185,7 +192,9 @@
 {
     NSInteger index = [self.scrollView.subviews indexOfObject:sender];
     self.selectedLicense = (int)index;
+#if !TARGET_OS_TV
     [self.impactGenerator impactOccurred];
+#endif
 }
 
 

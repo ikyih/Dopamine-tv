@@ -5,6 +5,8 @@
 //  Created by tomt000 on 08/01/2024.
 //
 
+#import <TargetConditionals.h>
+#if !TARGET_OS_TV
 #import "DOCreditsViewController.h"
 #import "DOLicenseViewController.h"
 #import "DOUIManager.h"
@@ -49,3 +51,4 @@
 }
 
 @end
+#endif

@@ -6,13 +6,16 @@
 //
 
 #import "DOAppSwitch.h"
+#import <TargetConditionals.h>
 
 @interface DOAppSwitch ()
 
 @property (strong, nonatomic) UIImageView *iconView;
 @property (strong, nonatomic) UIStackView *stackView;
 @property (strong, nonatomic) UIImageView *selector;
+#if !TARGET_OS_TV
 @property (strong, nonatomic) UIImpactFeedbackGenerator *hapticGenerator;
+#endif
 
 
 @end
@@ -25,7 +28,9 @@
 -(id)initWithIcon:(UIImage *)icon title:(NSString *)title {
     self = [super init];
     if (self) {
+#if !TARGET_OS_TV
         self.hapticGenerator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleLight];
+#endif
         
         self.iconView = [[UIImageView alloc] initWithImage:icon];
         self.iconView.layer.masksToBounds = YES;
@@ -87,7 +92,9 @@
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
+#if !TARGET_OS_TV
     [self.hapticGenerator impactOccurred];
+#endif
     self.iconView.alpha = 0.75;
 }
 

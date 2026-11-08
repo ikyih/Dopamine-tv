@@ -5,6 +5,8 @@
 //  Created by tomt000 on 26/01/2024.
 //
 
+#import <TargetConditionals.h>
+#if !TARGET_OS_TV
 #import "DOCreditsCell.h"
 #import "DOGlobalAppearance.h"
 
@@ -148,3 +150,4 @@
 
 
 @end
+#endif

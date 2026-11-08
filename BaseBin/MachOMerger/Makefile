@@ -7,7 +7,7 @@ TARGET=arm64-apple-macos11.0
 else
 ENTITLEMENTS_ARG=--entitlements MachOMerger.entitlements
 SDK=iphoneos
-TARGET=arm64-apple-ios14.0
+TARGET=arm64-apple-ios15.0
 endif
 
 SDK_PATH=$(shell xcrun --sdk $(SDK) --show-sdk-path)

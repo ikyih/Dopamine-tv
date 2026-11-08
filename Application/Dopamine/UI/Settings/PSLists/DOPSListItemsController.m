@@ -7,6 +7,7 @@
 
 #import "DOPSListItemsController.h"
 #import "DOPSListController.h"
+#import <TargetConditionals.h>
 
 @interface DOPSListItemsController ()
 
@@ -17,11 +18,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+#if !TARGET_OS_TV
     [_table setSeparatorColor:[UIColor clearColor]];
     [_table setBackgroundColor:[UIColor clearColor]];
     [DOPSListController setupViewControllerStyle: self];
     
     _table.tableHeaderView = [DOPSListItemsController makeHeader: ((PSSpecifier*)self.specifier).name withTarget:self];
+#endif
 }
 
 + (UIView *)makeHeader:(NSString *)title withTarget:(id)target
@@ -76,6 +79,7 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+#if !TARGET_OS_TV
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     cell.backgroundColor = [UIColor clearColor];
 }
@@ -91,6 +95,7 @@
 {
     return UIStatusBarStyleLightContent;
 }
+#endif
 
 
 @end

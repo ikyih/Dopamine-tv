@@ -11,6 +11,7 @@
 #import "DOActionMenuButton.h"
 #import "DOGlobalAppearance.h"
 #import "DOUIManager.h"
+#import <TargetConditionals.h>
 
 @interface DOLogCrashViewController ()
 
@@ -60,7 +61,7 @@
         [shareButton.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor constant:-30]
     ]];
     
-    if (@available(iOS 16.0, *)) {
+    if (@available(iOS 16.0, tvOS 16.0, *)) {
         _logView = [UITextView textViewUsingTextLayoutManager:false];
     }
     else {
@@ -79,7 +80,9 @@
 
     NSArray *reverseLog = [[[DOUIManager sharedInstance] logRecord] reverseObjectEnumerator].allObjects;
     _logView.text = [reverseLog componentsJoinedByString:@"\n"];
+#if !TARGET_OS_TV
     _logView.editable = NO;
+#endif
     _logView.font = [UIFont systemFontOfSize:14];
     _logView.textColor = [UIColor whiteColor];
     _logView.backgroundColor = [UIColor clearColor];

@@ -38,7 +38,9 @@
 
         ]];
         self.transform = CGAffineTransformMakeTranslation(0, 8);
+#if !TARGET_OS_TV
         self.feedbackGenerator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleLight];
+#endif
         self.alpha = 0;
         
         self.completedImage = completedImage;
@@ -74,7 +76,9 @@
         self.transform = CGAffineTransformMakeTranslation(0, 0);
     }];
 
+#if !TARGET_OS_TV
     [self.feedbackGenerator impactOccurred];
+#endif
 }
 
 - (void)setCompleted {
@@ -87,9 +91,11 @@
 
 - (void)setSuccess {
     [self completeWithImage:self.successImage];
+#if !TARGET_OS_TV
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         [self.feedbackGenerator impactOccurredWithIntensity:1];
     });
+#endif
 }
 
 @end

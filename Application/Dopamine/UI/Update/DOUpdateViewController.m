@@ -13,6 +13,7 @@
 #import "DOUIManager.h"
 #import "DOEnvironmentManager.h"
 #import <CoreServices/LSApplicationProxy.h>
+#import <TargetConditionals.h>
 
 @interface DOUpdateViewController ()
 
@@ -64,7 +65,9 @@
     self.changelog.textColor = [UIColor colorWithWhite:1.0 alpha:1.0];
     self.changelog.backgroundColor = [UIColor clearColor];
     self.changelog.translatesAutoresizingMaskIntoConstraints = NO;
+#if !TARGET_OS_TV
     self.changelog.editable = NO;
+#endif
     self.changelog.textAlignment = NSTextAlignmentCenter;
     self.changelog.alpha = 0.7;
 

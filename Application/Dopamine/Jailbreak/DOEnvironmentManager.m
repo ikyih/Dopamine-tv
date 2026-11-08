@@ -13,21 +13,30 @@
 #import <sys/utsname.h>
 #import <sys/stat.h>
 #import <unistd.h>
+#import <TargetConditionals.h>
+#import <dlfcn.h>
 #import <mach-o/dyld.h>
 #import <libgrabkernel2/libgrabkernel2.h>
 #import <libjailbreak/info.h>
 #import <libjailbreak/codesign.h>
 #import <libjailbreak/util.h>
+#if !TARGET_OS_TV
 #import <libjailbreak/display.h>
+#endif
 #import <libjailbreak/machine_info.h>
 #import <libjailbreak/carboncopy.h>
 
+#if !TARGET_OS_TV
 #import <IOKit/IOKitLib.h>
+#import <LocalAuthentication/LocalAuthentication.h>
+#else
+#import "tvos_iokit_compat.h"
+#endif
+#import "tvos_process_compat.h"
 #import "DOUIManager.h"
 #import "DOExploitManager.h"
 #import "DOPreferenceManager.h"
 #import "NSData+Hex.h"
-#import <LocalAuthentication/LocalAuthentication.h>
 
 int reboot3(uint64_t flags, ...);
 CFPropertyListRef MGCopyAnswer(CFStringRef);
@@ -223,6 +232,24 @@ extern char **environ;
 
 - (BOOL)isSPTM
 {
+#if TARGET_OS_TV
+    if (@available(tvOS 17.0, *)) {
+        tvos_io_registry_entry_t memory_map =
+            tvos_IORegistryEntryFromPath(0, "IODeviceTree:/chosen/memory-map");
+        if (memory_map == 0) return NO;
+
+        CFArrayRef keys = (CFArrayRef)tvos_IORegistryEntryCreateCFProperty(
+            memory_map, CFSTR("IORegistryEntryPropertyKeys"), kCFAllocatorDefault, 0);
+        tvos_IOObjectRelease(memory_map);
+        if (!keys) return NO;
+
+        CFRange range = CFRangeMake(0, CFArrayGetCount(keys));
+        BOOL isSPTM = CFArrayContainsValue(keys, range, CFSTR("SPTM")) &&
+            CFArrayContainsValue(keys, range, CFSTR("TXM"));
+        CFRelease(keys);
+        return isSPTM;
+    }
+#else
     if (@available(iOS 17.0, *)) {
         io_registry_entry_t memory_map = IORegistryEntryFromPath(kIOMainPortDefault, "IODeviceTree:/chosen/memory-map");
         if (memory_map == IO_OBJECT_NULL)   return NO;
@@ -238,6 +265,7 @@ extern char **environ;
 
         return isSPTM;
     }
+#endif
     return false;
 }
 
@@ -246,7 +274,23 @@ extern char **environ;
     cpu_subtype_t cpuFamily = 0;
     size_t cpuFamilySize = sizeof(cpuFamily);
     sysctlbyname("hw.cpufamily", &cpuFamily, &cpuFamilySize, NULL, 0);
-    
+
+#if TARGET_OS_TV
+    if ([self isArm64e]) {
+        if (cpuFamily == CPUFAMILY_ARM_VORTEX_TEMPEST || cpuFamily == CPUFAMILY_ARM_LIGHTNING_THUNDER) {
+            return @"No support (Momentarius, PPL)";
+        }
+        else if (![self isSPTM]) {
+            return @"No support (PPL)";
+        }
+        else {
+            return @"No support (SPTM)";
+        }
+    }
+    else {
+        return @"tvOS 15.0 - it's complicated (arm64)";
+    }
+#else
     if ([self isArm64e]) {
         if (cpuFamily == CPUFAMILY_ARM_VORTEX_TEMPEST || cpuFamily == CPUFAMILY_ARM_LIGHTNING_THUNDER) {
             return @"iOS 15.0 - 18.7.1, 26.0 - 26.0.1 (A12/A13, PPL)";
@@ -261,6 +305,7 @@ extern char **environ;
     else {
         return @"iOS 15.0 - 18.7.1 (arm64)";
     }
+#endif
 }
 
 - (BOOL)isInstalledThroughTrollStore
@@ -796,6 +841,9 @@ extern char **environ;
 
 - (BOOL)deviceSupportsFaceID
 {
+#if TARGET_OS_TV
+    return NO;
+#else
     if (![LAContext class]) return NO;
 
     LAContext *myContext = [[LAContext alloc] init];
@@ -806,6 +854,7 @@ extern char **environ;
     }
 
     return myContext.biometryType == LABiometryTypeFaceID;
+#endif
 }
 
 - (BOOL)deviceSupportsLandscapeBootLogo

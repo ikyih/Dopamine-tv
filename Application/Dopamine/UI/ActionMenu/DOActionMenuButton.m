@@ -7,12 +7,15 @@
 
 #import "DOActionMenuButton.h"
 #import "DOGlobalAppearance.h"
+#import <TargetConditionals.h>
 
 @interface DOActionMenuButton () {
     UIView *_separator;
 }
 
+#if !TARGET_OS_TV
 @property (nonatomic) UIImpactFeedbackGenerator *feedbackGenerator;
+#endif
 
 @end
 
@@ -41,7 +44,9 @@
         ]];
     }
 
+#if !TARGET_OS_TV
     button.feedbackGenerator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleLight];
+#endif
     [button addTarget:button action:@selector(buttonPressed) forControlEvents:UIControlEventTouchUpInside];
 
     return button;
@@ -49,7 +54,9 @@
 
 -(void)buttonPressed
 {
+#if !TARGET_OS_TV
     [self.feedbackGenerator impactOccurred];
+#endif
 }
 
 -(void)setBottomSeparator:(BOOL)bottomSeparator

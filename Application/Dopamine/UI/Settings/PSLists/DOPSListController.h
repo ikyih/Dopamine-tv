@@ -6,13 +6,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <TargetConditionals.h>
+#if !TARGET_OS_TV
 #import <Preferences/PSListController.h>
 #import <Preferences/PSSpecifier.h>
+#endif
 
 
 NS_ASSUME_NONNULL_BEGIN
 
+#if TARGET_OS_TV
+@interface DOPSListController : UIViewController
+#else
 @interface DOPSListController : PSListController
+#endif
 
 + (void)setupViewControllerStyle:(UIViewController*)vc;
 

@@ -14,6 +14,7 @@
 #include <mach-o/dyld.h>
 #include <time.h>
 #include <dlfcn.h>
+#include "tvos_mach_compat.h"
 
 #define MACH64_SEND_KOBJECT_CALL 0x0000000200000000ull
 

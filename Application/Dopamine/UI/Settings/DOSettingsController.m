@@ -5,6 +5,8 @@
 //  Created by tomt000 on 08/01/2024.
 //
 
+#import <TargetConditionals.h>
+#if !TARGET_OS_TV
 #import "DOSettingsController.h"
 #import <objc/runtime.h>
 #import <Photos/Photos.h>
@@ -746,3 +748,4 @@
 
 
 @end
+#endif

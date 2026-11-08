@@ -6,6 +6,7 @@
 //
 
 #import "DODebugLogView.h"
+#import <TargetConditionals.h>
 
 @implementation DODebugLogView
 
@@ -18,7 +19,9 @@
         self.textView.backgroundColor = [UIColor clearColor];
         self.textView.textColor = [UIColor whiteColor];
         self.textView.font = [UIFont systemFontOfSize:14];
+#if !TARGET_OS_TV
         self.textView.editable = NO;
+#endif
         self.textView.scrollEnabled = YES;
         self.textView.textContainerInset = UIEdgeInsetsMake(0, 15, 15, 15);
         self.textView.font = [UIFont monospacedSystemFontOfSize:12 weight:UIFontWeightRegular];

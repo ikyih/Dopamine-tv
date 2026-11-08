@@ -6,6 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <TargetConditionals.h>
 #import "DOLoadingIndicator.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -15,7 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) UILabel *label;
 @property (nonatomic) DOLoadingIndicator *loadingIndicator;
 @property (nonatomic) BOOL completed;
+#if !TARGET_OS_TV
 @property (nonatomic) UIImpactFeedbackGenerator *feedbackGenerator;
+#endif
 
 @property (nonatomic) UIImage *completedImage;
 @property (nonatomic) UIImage *failedImage;

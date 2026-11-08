@@ -6,6 +6,7 @@
 //
 
 #import "DOUIManager.h"
+#import <TargetConditionals.h>
 #import "DOEnvironmentManager.h"
 #import "DOThemeManager.h"
 #import "DOTheme.h"
@@ -242,11 +243,15 @@
     if (self.logRecord.count == 0)
         return;
 
+#if !TARGET_OS_TV
     NSString *log = [self.logRecord componentsJoinedByString:@"\n"];
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[log] applicationActivities:nil];
     activityViewController.popoverPresentationController.sourceView = sourceView;
     activityViewController.popoverPresentationController.sourceRect = sourceView.bounds;
     [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:activityViewController animated:YES completion:nil];
+#else
+    (void)sourceView;
+#endif
 }
 
 - (void)completeJailbreak

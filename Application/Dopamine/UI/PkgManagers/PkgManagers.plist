@@ -22,5 +22,25 @@
 		<key>Package</key>
 		<string>zebra.deb</string>
 	</dict>
+	<dict>
+		<key>Display Name</key>
+		<string>Cydia Classic</string>
+		<key>Key</key>
+		<string>xyz.cypwn.cydiaclassic</string>
+		<key>Icon</key>
+		<string>Cydia</string>
+		<key>Package</key>
+		<string>cydia.deb</string>
+	</dict>
+	<dict>
+		<key>Display Name</key>
+		<string>PurePKG</string>
+		<key>Key</key>
+		<string>uwu.lrdsnow.purepkg</string>
+		<key>Icon</key>
+		<string>purepkg</string>
+		<key>Package</key>
+		<string>uwu.lrdsnow.purepkg_appletvos-arm64.deb</string>
+	</dict>
 </array>
 </plist>

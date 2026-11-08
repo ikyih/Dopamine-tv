@@ -6,12 +6,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <TargetConditionals.h>
 #import "DOActionMenuDelegate.h"
 #import "DOHeaderView.h"
 #import "DOGlobalAppearance.h"
 #import "DOActionMenuView.h"
+#if !TARGET_OS_TV
 #import "DOCreditsViewController.h"
 #import "DOSettingsController.h"
+#endif
 #import "DOJailbreakButton.h"
 
 NS_ASSUME_NONNULL_BEGIN

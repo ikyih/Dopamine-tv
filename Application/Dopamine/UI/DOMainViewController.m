@@ -13,6 +13,7 @@
 #import "DOActionMenuButton.h"
 #import "DOUpdateViewController.h"
 #import "DOLogCrashViewController.h"
+#import <TargetConditionals.h>
 #import <pthread.h>
 #import <sys/sysctl.h>
 #import <libjailbreak/libjailbreak.h>
@@ -87,24 +88,32 @@
     ]];
     
     //Action Menu
-    DOActionMenuView *actionView = [[DOActionMenuView alloc] initWithActions:@[
+    NSMutableArray<UIAction *> *actions = [NSMutableArray array];
+#if !TARGET_OS_TV
+    [actions addObject:
         [UIAction actionWithTitle:DOLocalizedString(@"Menu_Settings_Title") image:[UIImage systemImageNamed:@"gearshape" withConfiguration:[DOGlobalAppearance smallIconImageConfiguration]] identifier:@"settings" handler:^(__kindof UIAction * _Nonnull action) {
             [self.navigationController pushViewController:[[DOSettingsController alloc] init] animated:YES];
-        }],
+        }]];
+#endif
+    [actions addObject:
         [UIAction actionWithTitle:DOLocalizedString(@"Menu_Restart_SpringBoard_Title") image:[UIImage systemImageNamed:@"arrow.clockwise" withConfiguration:[DOGlobalAppearance smallIconImageConfiguration]] identifier:@"respring" handler:^(__kindof UIAction * _Nonnull action) {
             [self fadeToBlack:^{
                 [[DOEnvironmentManager sharedManager] respring];
             }];
-        }],
+        }]];
+    [actions addObject:
         [UIAction actionWithTitle:DOLocalizedString(@"Menu_Reboot_Userspace_Title") image:[UIImage systemImageNamed:@"arrow.clockwise.circle" withConfiguration:[DOGlobalAppearance smallIconImageConfiguration]] identifier:@"reboot-userspace" handler:^(__kindof UIAction * _Nonnull action) {
             [self fadeToBlack:^{
                 [[DOEnvironmentManager sharedManager] rebootUserspace];
             }];
-        }],
+        }]];
+#if !TARGET_OS_TV
+    [actions addObject:
         [UIAction actionWithTitle:DOLocalizedString(@"Menu_Credits_Title") image:[UIImage systemImageNamed:@"info.circle" withConfiguration:[DOGlobalAppearance smallIconImageConfiguration]] identifier:@"credits" handler:^(__kindof UIAction * _Nonnull action) {
             [self.navigationController pushViewController:[[DOCreditsViewController alloc] init] animated:YES];
-        }]
-    ] delegate:self];
+        }]];
+#endif
+    DOActionMenuView *actionView = [[DOActionMenuView alloc] initWithActions:actions delegate:self];
     
     [stackView addArrangedSubview: actionView];
 
@@ -393,6 +402,7 @@
 
 #pragma mark - Status Bar
 
+#if !TARGET_OS_TV
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
@@ -407,17 +417,22 @@
 {
     return self.hideHomeIndicator;
 }
+#endif
 
 - (void)setHideStatusBar:(BOOL)hideStatusBar
 {
     _hideStatusBar = hideStatusBar;
+#if !TARGET_OS_TV
     [self setNeedsStatusBarAppearanceUpdate];
+#endif
 }
 
 - (void)setHideHomeIndicator:(BOOL)hideHomeIndicator
 {
     _hideHomeIndicator = hideHomeIndicator;
+#if !TARGET_OS_TV
     [self setNeedsUpdateOfHomeIndicatorAutoHidden];
+#endif
 }
 
 @end
